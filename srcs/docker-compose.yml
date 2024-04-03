@@ -1,0 +1,64 @@
+version: '3'
+
+volumes:
+  wordpress:
+    driver_opts:
+      type: none
+      device: /home/oelbouha/data/wordpress
+      o: bind
+  mariadb:
+    driver_opts:
+      type: none
+      device:  /home/oelbouha/data/mariadb
+      o: bind
+
+networks:
+  inception:
+    driver: bridge
+
+services:
+  mariadb:
+    build:
+      context: ./requirments/mariadb/
+      dockerfile: Dockerfile
+    container_name: mariadb
+    image: mariadb:1337
+    env_file:
+      - .env
+    networks:
+      - inception
+    volumes:
+      - mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  nginx:
+    build:
+      context: ./requirments/nginx/
+      dockerfile: Dockerfile
+    container_name: nginx
+    image: nginx:1337
+    networks:
+      - inception
+    env_file:
+      - .env
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html
+    ports:
+      - "443:443"
+  wordpress:
+    build: ./requirments/wordpress/
+    container_name: wordpress
+    image: wordpress:1337
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    ports:
+      - "9000:9000"
+
