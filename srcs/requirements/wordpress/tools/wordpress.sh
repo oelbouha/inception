@@ -48,5 +48,5 @@ wp user create	--allow-root \
 				--role=author \
 				--user_pass=$WORDPRESS_SUB_PASSWORD
 
-echo "Starting php-fpm"
+echo "Starting php-fpm ..."
 exec $@
