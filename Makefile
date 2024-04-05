@@ -18,7 +18,10 @@ down :
 start :
 	@echo "Starting the containers ... "
 	@docker-compose -f ./srcs/docker-compose.yml start
+stop :
+	@echo "Stoping the containers ... "
+	@docker-compose -f ./srcs/docker-compose.yml stop
 
 re : down build up
 
-.phony : all up build ps down start re
+.phony : all up build ps down start re stop
